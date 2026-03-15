@@ -1,11 +1,11 @@
-import { SplitText } from "gsap-trial/SplitText";
+import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
 import { smoother } from "../Navbar";
 
 let initialized = false;
 
 export function initialFX() {
-  if (initialized) return; // prevents duplicate animations
+  if (initialized) return;
   initialized = true;
 
   document.body.style.overflowY = "auto";
@@ -21,8 +21,6 @@ export function initialFX() {
     delay: 1,
   });
 
-  /* -------- MAIN LANDING TEXT -------- */
-
   const landingText = new SplitText(
     [".landing-info h3", ".landing-intro h2", ".landing-intro h1"],
     {
@@ -33,7 +31,7 @@ export function initialFX() {
 
   gsap.fromTo(
     landingText.chars,
-    { opacity: 0, y: 60 }, // reduced distance
+    { opacity: 0, y: 60 },
     {
       opacity: 1,
       y: 0,
@@ -43,8 +41,6 @@ export function initialFX() {
       delay: 0.3,
     }
   );
-
-  /* -------- SECONDARY TEXT -------- */
 
   const TextProps = { type: "chars,lines", linesClass: "split-h2" };
 
@@ -63,8 +59,6 @@ export function initialFX() {
     }
   );
 
-  /* -------- SMALL TEXT -------- */
-
   gsap.fromTo(
     ".landing-info-h2",
     { opacity: 0, y: 30 },
@@ -77,8 +71,6 @@ export function initialFX() {
     }
   );
 
-  /* -------- HEADER -------- */
-
   gsap.fromTo(
     [".header", ".icons-section", ".nav-fade"],
     { opacity: 0 },
@@ -90,8 +82,6 @@ export function initialFX() {
     }
   );
 
-  /* -------- LOOP TEXT -------- */
-
   const landingText3 = new SplitText(".landing-h2-info-1", TextProps);
   const landingText4 = new SplitText(".landing-h2-1", TextProps);
   const landingText5 = new SplitText(".landing-h2-2", TextProps);
@@ -99,8 +89,6 @@ export function initialFX() {
   LoopText(landingText2, landingText3);
   LoopText(landingText4, landingText5);
 }
-
-/* ---------------- LOOP TEXT ---------------- */
 
 function LoopText(Text1: SplitText, Text2: SplitText) {
   const tl = gsap.timeline({
