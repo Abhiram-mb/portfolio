@@ -1,0 +1,101 @@
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
+import { SplitText } from "gsap-trial/SplitText";
+
+interface ParaElement extends HTMLElement {
+  anim?: gsap.core.Animation;
+  split?: SplitText;
+}
+
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+
+let initialized = false;
+
+export default function setSplitText() {
+  if (initialized) return;
+  initialized = true;
+
+  ScrollTrigger.config({ ignoreMobileResize: true });
+
+  if (window.innerWidth < 900) return;
+
+  const paras: NodeListOf<ParaElement> =
+    document.querySelectorAll(".para");
+
+  const titles: NodeListOf<ParaElement> =
+    document.querySelectorAll(".title");
+
+  const TriggerStart =
+    window.innerWidth <= 1024 ? "top 70%" : "20% 75%";
+
+  const ToggleAction = "play none none reverse";
+
+  /* ---------------- PARAGRAPHS ---------------- */
+  paras.forEach((para) => {
+    para.classList.add("visible");
+
+    const paraSplit = new SplitText(para, {
+      type: "lines,words",
+      linesClass: "split-line",
+    });
+
+    para.split = paraSplit;
+
+    para.anim = gsap.fromTo(
+      paraSplit.words,
+      {
+        autoAlpha: 0,
+        y: 60,
+      },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.02,
+        scrollTrigger: {
+          trigger: para,
+          start: TriggerStart,
+          toggleActions: ToggleAction,
+          once: true,
+        },
+      }
+    );
+  });
+
+  /* ---------------- TITLES ---------------- */
+  titles.forEach((title) => {
+    const titleSplit = new SplitText(title, {
+      type: "chars,lines",
+      linesClass: "split-line",
+    });
+
+    title.split = titleSplit;
+
+    title.anim = gsap.fromTo(
+      titleSplit.chars,
+      {
+        autoAlpha: 0,
+        y: 60,
+        rotate: 8,
+      },
+      {
+        autoAlpha: 1,
+        y: 0,
+        rotate: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        stagger: 0.025,
+        scrollTrigger: {
+          trigger: title,
+          start: TriggerStart,
+          toggleActions: ToggleAction,
+          once: true,
+        },
+      }
+    );
+  });
+
+  ScrollTrigger.refresh();
+}
